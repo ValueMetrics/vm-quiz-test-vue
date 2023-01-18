@@ -16,6 +16,7 @@
     <a href="https://router.vuejs.org/" target="_blank"
       >https://router.vuejs.org/</a
     >
+    <a href="https://vueuse.org/" target="_blank">https://vueuse.org/</a>
     <a href="https://tailwindcss.com/" target="_blank"
       >https://tailwindcss.com/</a
     >
@@ -44,6 +45,6 @@ p {
 }
 
 a:hover {
-  @apply gradient-text;
+  @apply underline;
 }
 </style>
