@@ -13,7 +13,7 @@
     <a href="https://opentdb.com/api_category.php" target="_blank"
       >https://opentdb.com/api_category.php</a
     >
-    <a href="https://tailwindcss.com/" target="_blank"
+    <a href="https://router.vuejs.org/" target="_blank"
       >https://router.vuejs.org/</a
     >
     <a href="https://tailwindcss.com/" target="_blank"
