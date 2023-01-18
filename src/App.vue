@@ -1,5 +1,5 @@
 <template>
-  <Welcome msg="Welcome to the VM Quiz Test!" />
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
