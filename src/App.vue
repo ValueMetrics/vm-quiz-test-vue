@@ -2,6 +2,4 @@
   <router-view></router-view>
 </template>
 
-<script setup lang="ts">
-import Welcome from "./components/Welcome.vue";
-</script>
+<script lang="ts" setup></script>
