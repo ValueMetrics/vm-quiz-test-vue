@@ -5,26 +5,115 @@
       src="https://valuemetrics.nl/wp-content/uploads/2020/02/cropped-200224_Website_ValueMetrics-Logo-RGB-3.png"
     />
     <h1 class="my-8">{{ msg }}</h1>
-    <span class="mb-32 mt-24">So far so good!😉</span>
-    <h2>Some useful links</h2>
-    <a href="https://opentdb.com/api_config.php" target="_blank"
-      >https://opentdb.com/api_config.php</a
-    >
-    <a href="https://opentdb.com/api_category.php" target="_blank"
-      >https://opentdb.com/api_category.php</a
-    >
-    <a href="https://router.vuejs.org/" target="_blank"
-      >https://router.vuejs.org/</a
-    >
-    <a href="https://vueuse.org/" target="_blank">https://vueuse.org/</a>
-    <a href="https://tailwindcss.com/" target="_blank"
-      >https://tailwindcss.com/</a
-    >
+    <h2>Pick a category</h2>
+    <div class="pill-wrapper">
+      <Pill
+        class="pill"
+        v-for="category in categories"
+        @click="pickCategory(category)"
+        :label-text="(category.name as string)"
+        :outline="fillCategoryPill(category)"
+        color="blue"
+      />
+    </div>
+    <br />
+    <h2>Pick a difficulty</h2>
+    <div class="pill-wrapper">
+      <Pill
+        class="pill"
+        v-for="difficulty in difficulties"
+        @click="pickDifficulty(difficulty)"
+        :label-text="(difficulty as string)"
+        :outline="fillDifficultyPill(difficulty)"
+        color="blue"
+      />
+    </div>
+    <br />
+    <Pill
+      @click="startQuiz"
+      label-text="Start"
+      :outline="disableStartButton"
+      :disable="disableStartButton"
+      color="green"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed, onMounted, ref } from "vue";
+import axios from "axios";
+
+import Pill from "./Pill.vue";
+import router from "../router";
+
 defineProps<{ msg: string }>();
+
+type Category = {
+  id: Number;
+  name: String;
+};
+
+type Question = {
+  category: string;
+  type: string;
+  difficulty: string;
+  question: string;
+  correct_answer: string;
+  incorrect_answers: string[];
+};
+
+// Options
+const categories = ref<Category[]>([]);
+const difficulties = ref<String[]>(["easy", "medium", "hard"]);
+
+// Chosen values
+const pickedCategory = ref<Category>();
+const pickedDifficulty = ref<String>();
+
+onMounted(async () => {
+  // Get all categories
+  const request = await axios.get("https://opentdb.com/api_category.php");
+  categories.value = request.data.trivia_categories;
+});
+
+const pickCategory = (category: Category) => {
+  pickedCategory.value = category;
+};
+
+const pickDifficulty = (difficulty: String) => {
+  pickedDifficulty.value = difficulty;
+};
+
+const startQuiz = async () => {
+  router.push({
+    path: "/quiz",
+    query: {
+      pickedCategory: pickedCategory.value?.id as number,
+      pickedDifficulty: pickedDifficulty.value as string,
+    },
+  });
+};
+
+const fillCategoryPill = (category: Category): Boolean => {
+  if (category.id === pickedCategory.value?.id) {
+    return false;
+  }
+  return true;
+};
+
+const fillDifficultyPill = (difficulty: String): Boolean => {
+  if (difficulty === pickedDifficulty.value) {
+    return false;
+  }
+  return true;
+};
+
+const disableStartButton = computed(() => {
+  if (pickedCategory.value?.id && pickedDifficulty.value) {
+    return false;
+  }
+  return true;
+});
 </script>
 
 <style lang="postcss" scoped>
@@ -46,5 +135,16 @@ p {
 
 a:hover {
   @apply underline;
+}
+
+.pill-wrapper {
+  width: 700px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.pill {
+  margin: 5px;
 }
 </style>
