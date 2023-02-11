@@ -11,7 +11,7 @@
         class="pill"
         v-for="category in categories"
         @click="pickCategory(category)"
-        :label-text="(category.name as string)"
+        :label-text="category.name"
         :outline="fillCategoryPill(category)"
         color="blue"
       />
@@ -23,7 +23,7 @@
         class="pill"
         v-for="difficulty in difficulties"
         @click="pickDifficulty(difficulty)"
-        :label-text="(difficulty as string)"
+        :label-text="difficulty"
         :outline="fillDifficultyPill(difficulty)"
         color="blue"
       />
@@ -49,26 +49,17 @@ import router from "../router";
 defineProps<{ msg: string }>();
 
 type Category = {
-  id: Number;
-  name: String;
-};
-
-type Question = {
-  category: string;
-  type: string;
-  difficulty: string;
-  question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
+  id: number;
+  name: string;
 };
 
 // Options
 const categories = ref<Category[]>([]);
-const difficulties = ref<String[]>(["easy", "medium", "hard"]);
+const difficulties = ref<string[]>(["easy", "medium", "hard"]);
 
 // Chosen values
 const pickedCategory = ref<Category>();
-const pickedDifficulty = ref<String>();
+const pickedDifficulty = ref<string>();
 
 onMounted(async () => {
   // Get all categories
